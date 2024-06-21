@@ -12,6 +12,12 @@
         :localdata="colorModes"
       ></uni-data-select>
     </uni-section>
+    <uni-section title="分辨率:" type="line">
+      <uni-data-select
+        v-model="selectedResolution"
+        :localdata="resolutions"
+      ></uni-data-select>
+    </uni-section>
     <button type="default" @click="scan()">扫描</button>
   </view>
 </template>
@@ -57,8 +63,18 @@ import { onMounted, ref } from 'vue';
       value:1,text:"灰度"
     },{
       value:2,text:"彩色"
-    },
+    }
   ];
+  let selectedResolution = 200;
+  let resolutions = [
+    {
+      value:300,text:"300"
+    },{
+      value:200,text:"200"
+    },{
+      value:100,text:"100"
+    }
+  ]
   const scan = () => {
     console.log(selectedScanner);
   }
