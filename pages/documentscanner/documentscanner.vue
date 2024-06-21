@@ -6,6 +6,12 @@
         :localdata="scanners"
       ></uni-data-select>
     </uni-section>
+    <uni-section title="颜色模式:" type="line">
+      <uni-data-select
+        v-model="selectedColorModes"
+        :localdata="colorModes"
+      ></uni-data-select>
+    </uni-section>
     <button type="default" @click="scan()">扫描</button>
   </view>
 </template>
@@ -43,6 +49,16 @@ import { onMounted, ref } from 'vue';
   
   let selectedScanner = -1;
   let scanners = ref([]);
+  let selectedColorModes = 0;
+  let colorModes = [
+    {
+      value:0,text:"黑白"
+    },{
+      value:1,text:"灰度"
+    },{
+      value:2,text:"彩色"
+    },
+  ];
   const scan = () => {
     console.log(selectedScanner);
   }
