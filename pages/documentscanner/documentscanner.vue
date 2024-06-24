@@ -19,9 +19,11 @@
       ></uni-data-select>
     </uni-section>
     <button type="default" @click="scan()">扫描</button>
-    <view>
-      <img v-if="scanned" :src="scanned" alt="">
-    </view>
+
+      <view>
+        <image mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
+      </view>
+
   </view>
 </template>
 
