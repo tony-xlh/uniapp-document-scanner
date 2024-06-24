@@ -19,7 +19,7 @@
       ></uni-data-select>
     </uni-section>
     <button type="default" @click="scan()">扫描</button>
-    <view v-for="scanned in scans">
+    <view v-for="scanned in scans" class="scanned">
       <image mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
     </view>
   </view>
@@ -139,6 +139,8 @@ import { onMounted, ref } from 'vue';
   }
 </script>
 
-<style>
-
+<style scoped>
+.scanned {
+  margin-top: 10px;
+}
 </style>
