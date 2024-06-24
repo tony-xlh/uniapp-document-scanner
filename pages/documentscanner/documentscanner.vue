@@ -22,9 +22,14 @@
     <view v-for="(scanned, index) in scans" class="scanned" >
       <image v-on:click="showAction(index);" mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
     </view>
-    <view class="container">
+    <view>
       <uni-popup ref="popup" type="dialog">
         <uni-popup-dialog class="popup-content" type="info" mode="base" content="保存该图？" :duration="0" :before-close="true" @close="closeDialog" @confirm="confirmDialog"></uni-popup-dialog>
+      </uni-popup>
+    </view>
+    <view>
+      <uni-popup ref="message" type="message">
+        <uni-popup-message type="success" message="保存成功" :duration="2000"></uni-popup-message>
       </uni-popup>
     </view>
   </view>
@@ -38,6 +43,7 @@ import { onMounted, ref } from 'vue';
     getScanners();
   })
   const popup = ref<any>();
+  const message = ref<any>();
   const getScanners = () => {
     uni.request({
         url: host+'DWTAPI/Scanners',
@@ -156,7 +162,23 @@ import { onMounted, ref } from 'vue';
   }
 
   const confirmDialog = () => {
-    console.log(scans.value[selectedScanIndex]);
+    console.log("share");
+    const dataURL = scans.value[selectedScanIndex];
+    const path = `${wx.env.USER_DATA_PATH}/${selectedScanIndex}.png`;
+    const fsm = wx.getFileSystemManager();
+    fsm.writeFile({
+      filePath: path,
+      data: dataURL.replace(/^data:image\/\w+;base64,/, ''),
+      encoding: 'base64',
+      success: () => {
+        uni.saveImageToPhotosAlbum({
+          filePath: path,
+          success: () => {
+            message.value.open();
+          }
+        });
+      }
+    })
     popup.value.close()
   }
 </script>
