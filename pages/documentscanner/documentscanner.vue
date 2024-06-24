@@ -19,8 +19,13 @@
       ></uni-data-select>
     </uni-section>
     <button type="default" @click="scan()">扫描</button>
-    <view v-for="scanned in scans" class="scanned">
-      <image mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
+    <view v-for="(scanned, index) in scans" class="scanned" >
+      <image v-on:click="showAction(index);" mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
+    </view>
+    <view class="container">
+      <uni-popup ref="popup" type="dialog">
+        <uni-popup-dialog class="popup-content" type="info" mode="base" content="保存该图？" :duration="0" :before-close="true" @close="closeDialog" @confirm="confirmDialog"></uni-popup-dialog>
+      </uni-popup>
     </view>
   </view>
 </template>
@@ -32,6 +37,7 @@ import { onMounted, ref } from 'vue';
   onMounted(() => {
     getScanners();
   })
+  const popup = ref<any>();
   const getScanners = () => {
     uni.request({
         url: host+'DWTAPI/Scanners',
@@ -79,6 +85,7 @@ import { onMounted, ref } from 'vue';
       value:100,text:"100"
     }
   ]
+  let selectedScanIndex = -1;
   const scans = ref([]);
   const createScanJob = () => {
     uni.request({
@@ -137,10 +144,34 @@ import { onMounted, ref } from 'vue';
     console.log(selectedScanner);
     createScanJob();
   }
+  
+  const showAction = (index:number) => {
+    console.log("clicked");
+    selectedScanIndex = index;
+    popup.value.open('top');
+  }
+  
+  const closeDialog = () => {
+    popup.value.close()
+  }
+
+  const confirmDialog = () => {
+    console.log(scans.value[selectedScanIndex]);
+    popup.value.close()
+  }
 </script>
 
 <style scoped>
 .scanned {
   margin-top: 10px;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: #fff;
 }
 </style>
