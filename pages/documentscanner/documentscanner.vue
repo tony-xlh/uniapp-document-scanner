@@ -19,11 +19,9 @@
       ></uni-data-select>
     </uni-section>
     <button type="default" @click="scan()">扫描</button>
-
-      <view>
-        <image mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
-      </view>
-
+    <view v-for="scanned in scans">
+      <image mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
+    </view>
   </view>
 </template>
 
@@ -81,7 +79,7 @@ import { onMounted, ref } from 'vue';
       value:100,text:"100"
     }
   ]
-  const scanned = ref("");
+  const scans = ref([]);
   const createScanJob = () => {
     uni.request({
         url: host+'DWTAPI/ScanJobs',
@@ -127,7 +125,8 @@ import { onMounted, ref } from 'vue';
           console.log(res);
           const arrayBuffer = new Uint8Array(res.data as ArrayBuffer)
           const dataURL = "data:image/png;base64," + uni.arrayBufferToBase64(arrayBuffer)
-          scanned.value = dataURL || ''
+          const scanned = dataURL || ''
+          scans.value.push(scanned);
         },
         fail: (res) => {
           console.log(res);
