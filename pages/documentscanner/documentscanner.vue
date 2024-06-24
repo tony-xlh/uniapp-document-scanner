@@ -32,6 +32,9 @@
         <uni-popup-message type="success" message="保存成功" :duration="2000"></uni-popup-message>
       </uni-popup>
     </view>
+    <view v-if="status" class="mask">
+      <text class="status">{{ status }}</text>
+    </view>
   </view>
 </template>
 
@@ -42,14 +45,17 @@ import { onMounted, ref } from 'vue';
   onMounted(() => {
     getScanners();
   })
+  const status = ref("");
   const popup = ref<any>();
   const message = ref<any>();
   const getScanners = () => {
+    status.value = "读取扫描仪中列表……";
     uni.request({
         url: host+'DWTAPI/Scanners',
         data: {},
         header: {},
         success: (res) => {
+          status.value = "";
           console.log(res.data);
           let devices:any[] = res.data as any[];
           let connectedScanners = [];
@@ -64,6 +70,7 @@ import { onMounted, ref } from 'vue';
           scanners.value = connectedScanners;
         },
         fail: (res) => {
+          status.value = "done";
           console.log(res);
         }
     });
@@ -94,6 +101,7 @@ import { onMounted, ref } from 'vue';
   let selectedScanIndex = -1;
   const scans = ref([]);
   const createScanJob = () => {
+    status.value = "扫描中……";
     uni.request({
         url: host+'DWTAPI/ScanJobs',
         data: {
@@ -123,11 +131,13 @@ import { onMounted, ref } from 'vue';
         },
         fail: (res) => {
           console.log(res);
+          status.value = "";
         }
     });
   }
   
   const getDocumentImage = (jobID:string) => {
+    status.value = "获取图片中……";
     uni.request({
         url: host+"DWTAPI/ScanJobs/"+jobID+"/NextDocument",
         data: {},
@@ -140,9 +150,11 @@ import { onMounted, ref } from 'vue';
           const dataURL = "data:image/png;base64," + uni.arrayBufferToBase64(arrayBuffer)
           const scanned = dataURL || ''
           scans.value.push(scanned);
+          status.value = "";
         },
         fail: (res) => {
           console.log(res);
+          status.value = "";
         }
     });
   }
@@ -186,6 +198,25 @@ import { onMounted, ref } from 'vue';
 <style scoped>
 .scanned {
   margin-top: 10px;
+}
+
+.mask {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 70%;
+}
+
+.status {
+  color: white;
+  text-shadow: 1px 1px 1px black;
 }
 
 .popup-content {
