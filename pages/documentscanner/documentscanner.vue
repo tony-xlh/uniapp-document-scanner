@@ -1,26 +1,30 @@
 <template>
   <view>
-    <uni-section title="扫描仪:" type="line">
-      <uni-data-select
-        v-model="selectedScanner"
-        :localdata="scanners"
-      ></uni-data-select>
-    </uni-section>
-    <uni-section title="颜色模式:" type="line">
-      <uni-data-select
-        v-model="selectedColorMode"
-        :localdata="colorModes"
-      ></uni-data-select>
-    </uni-section>
-    <uni-section title="分辨率:" type="line">
-      <uni-data-select
-        v-model="selectedResolution"
-        :localdata="resolutions"
-      ></uni-data-select>
-    </uni-section>
-    <button type="default" @click="scan()">扫描</button>
-    <view v-for="(scanned, index) in scans" class="scanned" >
-      <image v-on:click="showAction(index);" mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
+    <view class="scanner">
+      <uni-section title="扫描仪:" type="line">
+        <uni-data-select
+          v-model="selectedScanner"
+          :localdata="scanners"
+        ></uni-data-select>
+      </uni-section>
+      <uni-section title="颜色模式:" type="line">
+        <uni-data-select
+          v-model="selectedColorMode"
+          :localdata="colorModes"
+        ></uni-data-select>
+      </uni-section>
+      <uni-section title="分辨率:" type="line">
+        <uni-data-select
+          v-model="selectedResolution"
+          :localdata="resolutions"
+        ></uni-data-select>
+      </uni-section>
+      <button style="width:100%" type="default" @click="scan()">扫描</button>
+      <view class="image-list">
+        <view v-for="(scanned, index) in scans" class="scanned" >
+          <image v-on:click="showAction(index);" mode="aspectFit" style="width: 100%; height: 200px;"  :src="scanned" alt=""/>
+        </view>  
+      </view>      
     </view>
     <view>
       <uni-popup ref="popup" type="dialog">
@@ -198,6 +202,21 @@ import { onMounted, ref } from 'vue';
 <style scoped>
 .scanned {
   margin-top: 10px;
+}
+
+.scanner {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-list {
+  flex: 1;
+  overflow: auto;
 }
 
 .mask {
