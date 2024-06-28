@@ -2,6 +2,7 @@
 	<view class="container">
 		<view class="intro">
       <button type="default" @click="goto('/pages/documentscanner/documentscanner')">前往文档扫描页面</button>
+      <button type="default" @click="goto('/pages/camscanner/camscanner')">前往摄像头文档扫描页面</button>
     </view>
 	</view>
 </template>

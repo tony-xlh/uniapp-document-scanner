@@ -13,6 +13,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/camscanner/camscanner",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
